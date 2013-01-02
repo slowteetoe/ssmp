@@ -1,0 +1,10 @@
+<h2>View your secure message</h2>
+<div id="secret_box">
+<%= form_tag( {:action => :decrypt}, :remote => true, :id => "decryptform" ) do %>
+  <%= label_tag(:secret, "Enter the secret:")%>  <%= text_field_tag(:secret )%>
+  <%= submit_tag "decode!",:class => 'btn btn-primary' %>
+<% end %>
+</div>
+<div id="decoded_box" style="visibility:hidden;">
+<%= text_area_tag(:decrypted_body) %>
+</div>

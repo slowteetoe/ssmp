@@ -1,0 +1,12 @@
+<h2>Send a secure message</h2>
+<%= form_tag do %>
+  <%= label_tag(:sender, "Your name:") %><%= text_field_tag(:sender) %>
+  <br/>
+  <%= text_area_tag(:message, "", :size => "52x8") %>
+  <%= label_tag(:emailaddress, "Recipient email address:")%>  <%= text_field_tag(:emailaddress )%>
+  <%= label_tag(:phonenumber, "Recipient phone number:")%>  <%= text_field_tag(:phonenumber )%><span style="font-weight: light; font-style: italic;">(Optional)</span>
+  <br/>
+  <%= label_tag(:secret, "Secret:")%><%= text_field_tag(:secret, @default_secret )%>(What's this?)
+  <br/>
+  <%= submit_tag("Send!", :class => 'btn btn-primary') %>
+<% end %>
