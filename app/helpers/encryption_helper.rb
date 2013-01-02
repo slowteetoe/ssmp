@@ -1,6 +1,8 @@
 module EncryptionHelper
   require 'encryptor'
-  
+
+  APP_KEY = ENV['SSMP_APP_KEY']
+
   def key(secret)
     Digest::SHA256.hexdigest( APP_KEY + secret )
   end
