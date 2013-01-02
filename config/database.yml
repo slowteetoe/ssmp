@@ -39,4 +39,4 @@ production:
   database: ssmp_production
   pool: 5
   username: ssmp-prod
-  password: ssmp-prod
+  password: 
