@@ -1,7 +1,8 @@
 Ssmp::Application.routes.draw do
-  
+
   match 'view/:id' => 'message#view'
   match 'decrypt/:id' => 'message#decrypt'
+  match 'send_message' => 'message#create'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,12 +1,11 @@
 <h2>Send a secure message</h2>
-<%= form_tag do %>
-  <%= label_tag(:sender, "Your name:") %><%= text_field_tag(:sender) %>
-  <br/>
-  <%= text_area_tag(:message, "", :size => "52x8") %>
-  <%= label_tag(:emailaddress, "Recipient email address:")%>  <%= text_field_tag(:emailaddress )%>
-  <%= label_tag(:phonenumber, "Recipient phone number:")%>  <%= text_field_tag(:phonenumber )%><span style="font-weight: light; font-style: italic;">(Optional)</span>
-  <br/>
-  <%= label_tag(:secret, "Secret:")%><%= text_field_tag(:secret, @default_secret )%>(What's this?)
-  <br/>
-  <%= submit_tag("Send!", :class => 'btn btn-primary') %>
+<%= simple_form_for(@message_submission, {:url => '/send_message', :html => {:class => 'form-horizontal' }}) do |f| %>
+  <%= f.input :sender, :label => "Your name" %>
+  <%= f.input :content, :input_html => { :cols => 80, :rows => 5, :class => "span8" }, :as => :text, :label => "Your message" %>
+  <%= f.input :recipient, :label => "Recipient email address:" %>
+  <%= f.input :secret , :label => "Secret Passphrase:" , :hint => "Use this one or type your own" %>
+  <%= f.input :phone, :label => "Recipient phone number", :hint => "If you enter a phone number, we'll send the passphrase to the receipent via text message.  Otherwise, you're responsible for giving them the passphase - do NOT send it to them at the same email address." %>
+  <div class="form-actions">
+  <%= f.submit "Send!", :class => 'btn btn-primary' %>
+</div>
 <% end %>
