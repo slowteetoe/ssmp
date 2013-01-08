@@ -51,7 +51,12 @@ class MessageController < ApplicationController
       @m.save!
 
       # send email
-      logger.info "Please go to #{request.host}/view/#{@m.uuid} to retrieve this message"
+      logger.info "Please go to http://#{request.host}/view/#{@m.uuid} to retrieve this message"
+      begin
+        CommunicationMailer.you_have_mail(@message_submission.sender, @message_submission.recipient, @m.uuid).deliver
+      rescue
+        logger.error "Email sending failed =(  #{$!}"
+      end
 
       if @message_submission.phone.nil?
       else
