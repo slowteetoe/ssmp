@@ -39,7 +39,10 @@ class MessageController < ApplicationController
       @decrypted = "Invalid Passphrase"
     end
     @message.save
-    render :json => { :msg => @decrypted }
+    render :json => {:msg => @decrypted}
+  end
+
+  def success
   end
 
   def create
@@ -58,7 +61,8 @@ class MessageController < ApplicationController
         logger.error "Email sending failed =(  #{$!}"
       end
 
-      if @message_submission.phone.nil?
+      if @message_submission.phone.blank?
+        logger.info "No phone number provided, skipping SMS"
       else
         begin
           SMSSender.new.send_sms("Your SSMP secret: #{@message_submission.secret}", @message_submission.phone)
@@ -67,8 +71,7 @@ class MessageController < ApplicationController
         end
       end
 
-      # redirect to a success page
-      render :json => @m
+      redirect_to :success
     else
       flash[:error] = "There were errors with your submission, please check the form"
       render :action => :index
