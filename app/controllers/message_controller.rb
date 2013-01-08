@@ -46,16 +46,12 @@ class MessageController < ApplicationController
     @message_submission = MessageSubmission.new(params[:message_submission])
     @message_submission ||= MessageSubmission.new
     if @message_submission.valid?
-      m = Message.new
-      # encrypt the message with the passphrase
-      encrypted_val = encrypt( @message_submission.secret, @message_submission.content )
-      logger.info "The encrypted message is: #{encrypted_val}"
-      # save the message
-      m.contents = encrypted_val
-
-      m.save!
+      @m = Message.new
+      @m.contents = encrypt( @message_submission.secret, @message_submission.content )
+      @m.save!
 
       # send email
+      logger.info "Please go to #{request.host}/view/#{@m.uuid} to retrieve this message"
 
       if @message_submission.phone.nil?
       else
