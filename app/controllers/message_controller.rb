@@ -2,6 +2,7 @@ class MessageController < ApplicationController
   include EncryptionHelper
 
   require 'word_salad'
+  require 'smssender'
 
   def index
     @message_submission = MessageSubmission.new
@@ -56,7 +57,14 @@ class MessageController < ApplicationController
 
       # send email
 
-      # send sms (if phone # provided)
+      if @message_submission.phone.nil?
+      else
+        begin
+          SMSSender.new.send_sms("Your SSMP secret: #{@message_submission.secret}", @message_submission.phone)
+        rescue
+          logger.error "SMS failed, secret was #{@message_submission.secret}.  Error was #{$!}"
+        end
+      end
 
       # redirect to a success page
       render :json => @m
