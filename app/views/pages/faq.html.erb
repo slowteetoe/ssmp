@@ -1,0 +1,22 @@
+<h1>FAQ</h1>
+<dl>
+	<dt>What is 'simply secure message passing' good for?</dt>
+	<dd>Have you ever needed to provide sensitive information to someone you're working with, but isn't sitting next to you?  Stuff like server IP addresses, usernames or *gasp* passwords?<br/>
+		If so, you probably realise that your choices are limited - you can call them and then spend a bunch of time making sure they got the information correct ("No, no, not d, t - t as in tomato! No, uppercase...") OR you could send it through email</dd>
+		<br />
+
+	<dt>So, what's wrong with sending it through email?</dt>
+	<dd>Unfortunately, the internet is not a safe place.  There are many ways for a malicious hacker to intercept your email, especially as you send it while sipping on a latt&eacute; at your favorite shop with free wifi.  If you send the information, they can intercept one email and get all that sensitive information you didn't want known.</dd>
+		<br />
+	<dt>What makes SSMP more secure?</dt>
+	<dd>Several things: 
+		<br/><em>First</em>, your message is NEVER unencrypted at rest.  Even if an evil hacker got access to the database where we store your messages, they would not be able to read the messages without defeating the encryption. 
+		<br/><em>Second</em>, the passphrase and message id are NEVER sent together.  If a hacker was watching the recipient's mailbox and grabbed the email with the SSMP link, they would still need the passphrase to decrypt it.  If you chose to enter the recipient's phone number, then they will receive a SMS message with the passphrase.  Otherwise, you would have communicated the passphrase to the recipient through another method; maybe you called them, maybe it's a secret passphrase you two always use. In any case, this provides an extra layer of security that the hacker would have to compromise. 
+		<br/><em>Finally</em>, we use require the use of SSL/TLS to ensure that your data is safe while it goes back and forth between you and our servers.</dd>
+		<br />
+	<dt>Can someone guess my passphrase by guessing? (brute force)</dt>
+	<dd>Although it is possible if you pick a really simple passphrase (HINT: don't use 'password' or 'abc123'), it's extremely unlikely.  We also have a self-destruct mechanism on the decryption attempts - after a certain number of incorrect tries, the system will automatically delete the message.  Your intended recipient might never see the message, but at least no one else did either.</dd>
+		<br />
+	<dt>I forgot the passphrase, can you resend it or reset it?</dt>
+	<dd>Sorry, but we cannot.  We NEVER store the passphrase on the message.  If you forget the passphrase, that message can never be decrypted.  We encourage you to pick long, but memorable, passphrases if possible.</dd>
+</dl>

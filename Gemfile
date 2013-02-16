@@ -10,6 +10,8 @@ gem 'encryptor'
 gem 'twilio-ruby'
 gem 'word_salad'
 gem 'simple_form'
+# serve up static content easily
+gem "high_voltage"
 
 # Gems used only for assets and not required
 # in production environments by default.
