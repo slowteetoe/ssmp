@@ -7,7 +7,7 @@ class SMSSender
       @sender_phone = ENV['TWILIO_PHONE']
   end
 
-  def send(body, destination_phone)
+  def send_sms(body, destination_phone)
     @client = Twilio::REST::Client.new(@account_sid, @auth_token)
 
     @client.account.sms.messages.create(
