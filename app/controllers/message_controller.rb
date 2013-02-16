@@ -4,6 +4,8 @@ class MessageController < ApplicationController
   require 'word_salad'
   require 'smssender'
 
+  MAX_DECRYPTION_ATTEMPTS = 100
+
   def index
     @message_submission = MessageSubmission.new
     @message_submission.secret = 2.words.join("")
@@ -20,7 +22,7 @@ class MessageController < ApplicationController
 
   def decrypt_message
     logger.info "Attempting to decrypt uuid[#{params[:uuid]}]"
-    # this needs to try decrypting a given message using the provided secret
+
     @message = Message.find_by_uuid( params[:uuid] )
 
     if @message.nil?
@@ -36,6 +38,10 @@ class MessageController < ApplicationController
       logger.error "Decryption failed #{$!}"
       # it must increment attempt count for all failures as well
       @message.decryption_attempts += 1
+      if (@message.decryption_attempts >= MAX_DECRYPTION_ATTEMPTS)
+        logger.warn "Permanently deleting #{@message.uuid} because of too many decryption attempts"
+        Message.delete(@message.id)
+      end
       @decrypted = "Invalid Passphrase"
     end
     @message.save
@@ -54,7 +60,7 @@ class MessageController < ApplicationController
       @m.save!
 
       # send email
-      logger.info "Please go to https://#{request.host}/view/#{@m.uuid} to retrieve this message"
+      logger.debug "A new message was created at https://#{request.host}/view/#{@m.uuid}"
       begin
         CommunicationMailer.you_have_mail(@message_submission.sender, @message_submission.recipient, @m.uuid).deliver
       rescue
@@ -65,9 +71,9 @@ class MessageController < ApplicationController
         logger.info "No phone number provided, skipping SMS"
       else
         begin
-          SMSSender.new.send_sms("Your SSMP secret: #{@message_submission.secret}", @message_submission.phone)
+          SMSSender.new.send_sms("The secret phrase to access your SSMP from #{@message_submission.sender} is: #{@message_submission.secret}", @message_submission.phone)
         rescue
-          logger.error "SMS failed, secret was #{@message_submission.secret}.  Error was #{$!}"
+          logger.error "Could not send SMS message. Error was #{$!}"
         end
       end
 

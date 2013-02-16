@@ -7,12 +7,10 @@ module EncryptionHelper
   end
 
   def encrypt(secret, body)
-    logger.debug "Attempting to encrypt using #{secret}"
     Base64.encode64( Encryptor.encrypt( :value => body, :key => key(secret)) )
   end
 
   def decrypt(secret, body)
-    logger.debug "Attempting to decrypt using #{secret}"
     Encryptor.decrypt( :value => Base64.decode64(body), :key => key(secret) )
   end
 end
